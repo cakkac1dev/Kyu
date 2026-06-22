@@ -1,0 +1,35 @@
+{
+  "name": "anixart-desktop",
+  "version": "1.0.0",
+  "description": "Десктоп-клиент для просмотра аниме на основе AniXart API",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win",
+    "portable": "electron-builder --win portable"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.kyu.desktop",
+    "productName": "Kyu",
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "build/icon.png",
+      "artifactName": "Kyu-${version}-portable.exe"
+    },
+    "portable": {
+      "artifactName": "Kyu-${version}-portable.exe"
+    },
+    "compression": "maximum"
+  }
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    html, body { margin: 0; width: 100%; height: 100%; background: #000; overflow: hidden; }
+    .embed { position: absolute; inset: 0; }
+    .embed iframe { position: absolute; inset: 0; width: 100% !important; height: 100% !important; border: 0; }
+  </style>
+</head>
+<body>
+  <div class="embed"><iframe id="player" allowfullscreen allow="autoplay; fullscreen; encrypted-media"></iframe></div>
+  <script>
+    // URL плеера передаётся через hash: player.html#u=<encoded>
+    (function () {
+      var m = location.hash.match(/u=([^&]+)/);
+      if (m) document.getElementById('player').src = decodeURIComponent(m[1]);
+      window.addEventListener('hashchange', function () {
+        var mm = location.hash.match(/u=([^&]+)/);
+        if (mm) document.getElementById('player').src = decodeURIComponent(mm[1]);
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self';" />
+  <title>Kyu</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topnav">
+      <div class="brand">
+        <img class="brand-mark" src="icon.png" alt="" />
+        <span class="brand-text">Kyu</span>
+      </div>
+
+      <nav class="topnav-links" id="navLinks">
+        <button class="nav-pill active" data-view="discover" data-ic="discover">Обзор</button>
+        <button class="nav-pill" data-view="catalog" data-ic="catalog">Каталог</button>
+        <button class="nav-pill" data-view="bookmarks" data-ic="bookmark">Закладки</button>
+        <button class="nav-pill" data-view="feed" data-ic="feed">Лента</button>
+      </nav>
+
+      <div class="topnav-search" id="topSearch">
+        <span class="ts-ic" id="searchIcon"></span>
+        <input id="topSearchInput" type="text" placeholder="Поиск аниме…" />
+      </div>
+
+      <div class="topnav-right">
+        <button id="randomBtn" class="icon-btn" title="Случайное"></button>
+        <div class="profile-menu" id="profileMenu"></div>
+      </div>
+
+      <div class="win-controls">
+        <button id="winMin" class="win-btn" title="Свернуть"></button>
+        <button id="winMax" class="win-btn" title="Развернуть"></button>
+        <button id="winClose" class="win-btn close" title="Закрыть"></button>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="view-head">
+        <h1 id="viewTitle">Обзор</h1>
+        <div id="topbarControls" class="topbar-controls"></div>
+      </div>
+      <section class="view-root" id="scroller">
+        <div id="viewRoot"></div>
+        <footer class="page-footer" id="pageFooter">
+          <span class="foot-note">Kyu — неофициальный фан-клиент для AniXart · не связан с разработчиками AniXart · сделано с ❤️ вайбиком и claude-bro</span>
+          <span class="footer-links" id="footerLinks"></span>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card" id="modalCard"></div>
+  </div>
+
+  <div id="disclaimer" class="disclaimer hidden">
+    <div class="disclaimer-backdrop"></div>
+    <div class="disclaimer-card">
+      <img class="disclaimer-logo" src="icon.png" alt="" />
+      <h2>Это неофициальное приложение</h2>
+      <p><b>Kyu</b> — это неофициальный фан-клиент <b>для</b> AniXart, а не официальное приложение. Проект не связан с командой AniXart и сделан энтузиастом. Все данные берутся из публичного API AniXart.</p>
+      <p class="disclaimer-credit">сделано с ❤️ вайбиком и claude-bro</p>
+      <div class="disclaimer-actions">
+        <button id="dscHideBtn" class="btn secondary">Скрыть при следующем запуске</button>
+        <button id="dscCloseBtn" class="btn">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

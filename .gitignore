@@ -1,0 +1,12 @@
+# зависимости и сборки
+node_modules/
+dist/
+
+# логи и временные файлы
+*.log
+capture*.png
+cap*.json
+*.tmp
+
+# локальные данные пользователя (хранятся в %APPDATA%/Kyu, не в репо)
+store.json
