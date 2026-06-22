@@ -16,6 +16,12 @@
 > Проект **не связан** с командой AniXart и сделан энтузиастом. Все данные берутся из публичного API AniXart.
 > Сделано с ❤️ вайбиком и claude-bro.
 
+## ⬇️ Скачать
+
+[![Скачать](https://img.shields.io/badge/Скачать-Kyu%20portable%20.exe-7c5cff?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/cakkac1dev/Kyu/releases/latest)
+
+Последняя версия — на странице **[Releases](https://github.com/cakkac1dev/Kyu/releases/latest)**: скачай файл `Kyu-portable.exe`, запусти — установка не нужна.
+
 ## Возможности
 
 - 🛡️ **Встроенный адблокер** — режет рекламу в плеерах Kodik и Sibnet
