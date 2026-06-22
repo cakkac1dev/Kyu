@@ -54,10 +54,6 @@ npm run portable   # соберёт dist/Kyu-<версия>-portable.exe
 `%APPDATA%/Kyu/data/store.json`. В репозитории этих данных нет. Пароль нигде не сохраняется —
 он уходит только на сервер AniXart при входе.
 
-## Сайт
-
-Лендинг проекта — в папке [`site/`](site/) (статический HTML, можно захостить на GitHub Pages).
-
 ## Структура
 
 | Путь | Назначение |
@@ -66,7 +62,6 @@ npm run portable   # соберёт dist/Kyu-<версия>-portable.exe
 | `preload.js` | Безопасный мост `window.anixart` (contextBridge) |
 | `src/` | Интерфейс: `index.html`, `renderer.js`, `styles.css`, плеер-обёртка `player.html`, мост `playerbridge.js`, иконка |
 | `build/icon.png` | Иконка для сборки exe |
-| `site/` | Лендинг |
 
 Подробно об устройстве — в [ARCHITECTURE.md](ARCHITECTURE.md).
 
