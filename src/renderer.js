@@ -851,6 +851,22 @@ async function openPlayer(r) {
   const layout = el('div', { class: 'player-layout' }, frameWrap, epStrip);
   viewRoot.append(selectors, layout);
   let current = null, watchTimer = null;
+  // Отрисовка кнопки серии + крестик «снять отметку просмотра»
+  function paintEp(b, ep) {
+    b.classList.toggle('watched', !!ep.is_watched);
+    b.innerHTML = '';
+    b.append(el('span', { class: 'ep-label' }, (ep.is_watched ? '✓ ' : '') + (ep.name || ('Серия ' + ep.position))));
+    if (isAuthed() && ep.is_watched) {
+      const x = el('span', { class: 'ep-unwatch', title: 'Снять отметку «просмотрено»' }, '✕');
+      x.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        ep.is_watched = false;
+        paintEp(b, ep);
+        await window.anixart.episodeUnwatch(r.id, b._sid, ep.position).catch(() => {});
+      });
+      b.append(x);
+    }
+  }
   const playEpisode = (ep, sourceId, btn) => {
     current = { rId: r.id, sId: sourceId, position: ep.position };
     frame.src = 'player.html#u=' + encodeURIComponent(ep.url);
@@ -861,7 +877,7 @@ async function openPlayer(r) {
       watchTimer = setTimeout(() => {
         window.anixart.episodeWatch(r.id, sourceId, ep.position).catch(() => {});
         ep.is_watched = true;
-        if (btn) { btn.classList.add('watched'); if (btn.textContent.indexOf('✓') !== 0) btn.textContent = '✓ ' + btn.textContent; }
+        if (btn) paintEp(btn, ep);
       }, 60000);
     }
   };
@@ -894,7 +910,9 @@ async function openPlayer(r) {
     let resumeIdx = 0;
     if (eps.some((e) => e.is_watched)) { const u = eps.findIndex((e) => !e.is_watched); resumeIdx = u === -1 ? eps.length - 1 : u; }
     eps.forEach((ep, i) => {
-      const b = el('button', { class: 'ep-btn' + (ep.is_watched ? ' watched' : '') }, (ep.is_watched ? '✓ ' : '') + (ep.name || ('Серия ' + ep.position)));
+      const b = el('button', { class: 'ep-btn' });
+      b._sid = curSource;
+      paintEp(b, ep);
       b.addEventListener('click', () => { epStrip.querySelectorAll('.ep-btn').forEach((x) => x.classList.remove('active')); b.classList.add('active'); playEpisode(ep, curSource, b); });
       epStrip.append(b);
       if (i === resumeIdx) { b.classList.add('active'); playEpisode(ep, curSource, b); }

@@ -101,8 +101,8 @@ function registerIpc() {
   // Отметить серию просмотренной / снять отметку
   ipcMain.handle('api:episodeWatch', (_e, { rId, sId, position }) =>
     apiRequest(`/episode/watch/${rId}/${sId}${position != null ? '/' + position : ''}`));
-  ipcMain.handle('api:episodeUnwatch', (_e, { rId, sId }) =>
-    apiRequest(`/episode/unwatch/${rId}/${sId}`));
+  ipcMain.handle('api:episodeUnwatch', (_e, { rId, sId, position }) =>
+    apiRequest(`/episode/unwatch/${rId}/${sId}${position != null ? '/' + position : ''}`));
 
   // — Списки профиля (Смотрю / В планах / Просмотрено / Отложено / Брошено) —
   ipcMain.handle('api:profileList', (_e, { status, page }) =>

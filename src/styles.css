@@ -282,7 +282,9 @@ input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139,92,255
 .player-layout { display: flex; gap: 18px; align-items: flex-start; }
 .player-main { flex: 1; min-width: 0; position: relative; }
 .episode-strip { width: 250px; flex-shrink: 0; max-height: calc(100vh - 230px); overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 2px; }
-.episode-strip .ep-btn { width: 100%; text-align: left; }
+.episode-strip .ep-btn { width: 100%; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ep-unwatch { flex-shrink: 0; opacity: .5; font-size: 12px; line-height: 1; padding: 3px 6px; border-radius: 6px; transition: .15s; }
+.ep-unwatch:hover { opacity: 1; color: #ff5c93; background: rgba(255,92,147,.14); }
 .ep-btn { background: rgba(255,255,255,.04); border: 1px solid var(--line); color: var(--text-dim); padding: 9px 14px; border-radius: 11px; font-size: 13px; cursor: pointer; transition: .18s; }
 .ep-btn:hover { border-color: var(--accent); color: var(--text); }
 .ep-btn.active { background: var(--grad); color: #fff; border-color: transparent; box-shadow: var(--glow); }
