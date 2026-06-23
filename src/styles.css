@@ -214,9 +214,12 @@ input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139,92,255
 .detail-stats { display: flex; gap: 20px; margin: 14px 0; font-size: 14px; flex-wrap: wrap; align-items: center; }
 .detail-stats b { color: var(--text); }
 .detail-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; align-items: center; }
-.close-x { position: absolute; top: 16px; right: 18px; z-index: 5; width: 38px; height: 38px; border-radius: 50%; border: none; background: rgba(8,9,13,.55); backdrop-filter: blur(8px); color: #fff; font-size: 20px; cursor: pointer; transition: .2s; }
+.close-x { position: absolute; top: 16px; right: 18px; z-index: 50; width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(8,9,13,.6); backdrop-filter: blur(8px); color: #fff; font-size: 22px; line-height: 1; cursor: pointer; transition: .2s; display: grid; place-items: center; }
 .close-x:hover { background: var(--accent); transform: rotate(90deg); }
 .fav-toggle.active { background: rgba(61,220,132,.16); border-color: rgba(61,220,132,.4); color: #3ddc84; }
+.viewed-chip { display: inline-flex; align-items: center; gap: 6px; color: #3ddc84; cursor: pointer; font-size: 12.5px; font-weight: 600; padding: 4px 11px; border-radius: 100px; border: 1px solid rgba(61,220,132,.35); background: rgba(61,220,132,.1); transition: .2s; }
+.viewed-chip:hover { color: #ff5c93; border-color: rgba(255,92,147,.45); background: rgba(255,92,147,.12); }
+.viewed-chip .vx { opacity: .7; font-size: 11px; }
 .stars { display: inline-flex; gap: 3px; }
 .star { font-size: 22px; cursor: pointer; color: var(--text-dim2); transition: transform .12s, color .15s; line-height: 1; }
 .star:hover { transform: scale(1.2); }
@@ -273,16 +276,30 @@ input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139,92,255
 /* ── Плеер ────────────────────────────────────────────── */
 .player-selectors { display: flex; flex-wrap: wrap; gap: 12px; padding: 8px 0 16px; align-items: center; }
 .player-selectors label { font-size: 13px; color: var(--text-dim); }
-.episode-strip { display: flex; flex-wrap: wrap; gap: 9px; padding: 0 0 18px; }
-.ep-btn { background: rgba(255,255,255,.04); border: 1px solid var(--line); color: var(--text-dim); padding: 8px 14px; border-radius: 11px; font-size: 13px; cursor: pointer; transition: .18s; }
-.ep-btn:hover { border-color: var(--accent); color: var(--text); transform: translateY(-2px); }
+.player-fs-enter { margin-left: auto; }
+
+/* двухколоночная компоновка: плеер + список серий сбоку */
+.player-layout { display: flex; gap: 18px; align-items: flex-start; }
+.player-main { flex: 1; min-width: 0; position: relative; }
+.episode-strip { width: 250px; flex-shrink: 0; max-height: calc(100vh - 230px); overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 2px; }
+.episode-strip .ep-btn { width: 100%; text-align: left; }
+.ep-btn { background: rgba(255,255,255,.04); border: 1px solid var(--line); color: var(--text-dim); padding: 9px 14px; border-radius: 11px; font-size: 13px; cursor: pointer; transition: .18s; }
+.ep-btn:hover { border-color: var(--accent); color: var(--text); }
 .ep-btn.active { background: var(--grad); color: #fff; border-color: transparent; box-shadow: var(--glow); }
 .ep-btn.watched { color: #3ddc84; border-color: rgba(61,220,132,.35); }
 .ep-btn.watched.active { color: #fff; }
-.player-frame { width: 100%; aspect-ratio: 16/9; border: none; border-radius: 16px; background: #000; overflow: hidden; box-shadow: var(--shadow); }
+.player-frame { width: 100%; aspect-ratio: 16/9; max-height: calc(100vh - 205px); border: none; border-radius: 16px; background: #000; overflow: hidden; box-shadow: var(--shadow); }
 .player-frame webview { width: 100%; height: 100%; }
-/* Полноэкранный плеер: webview заполняет всё окно (а не только UI) */
-.player-frame.fs { position: fixed; inset: 0; z-index: 99999; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
+/* Полноэкранный плеер: webview заполняет всё окно */
+.player-frame.fs { position: fixed; inset: 0; z-index: 99999; aspect-ratio: auto; max-height: none; border-radius: 0; box-shadow: none; }
+.player-fs-exit { position: fixed; top: 18px; right: 18px; z-index: 100000; width: 44px; height: 44px; border-radius: 12px; border: none; background: rgba(8,9,13,.65); backdrop-filter: blur(10px); color: #fff; cursor: pointer; place-items: center; display: none; transition: background .2s; }
+.player-fs-exit.show { display: grid; }
+.player-fs-exit:hover { background: var(--accent); }
+@media (max-width: 920px) {
+  .player-layout { flex-direction: column; }
+  .episode-strip { width: 100%; flex-direction: row; flex-wrap: wrap; max-height: 120px; }
+  .episode-strip .ep-btn { width: auto; }
+}
 
 /* ── Профиль: статус, вкладки, графики ────────────────── */
 .profile-sub { margin-top: 8px; font-size: 13.5px; position: relative; z-index: 1; }

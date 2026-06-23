@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld('anixart', {
   favoritesList: (page) => ipcRenderer.invoke('api:favoritesList', { page }),
   historyList: (page) => ipcRenderer.invoke('api:historyList', { page }),
   historyAdd: (rId, sId, position) => ipcRenderer.invoke('api:historyAdd', { rId, sId, position }),
+  historyDelete: (id) => ipcRenderer.invoke('api:historyDelete', { id }),
   episodeWatch: (rId, sId, position) => ipcRenderer.invoke('api:episodeWatch', { rId, sId, position }),
   episodeUnwatch: (rId, sId) => ipcRenderer.invoke('api:episodeUnwatch', { rId, sId }),
 

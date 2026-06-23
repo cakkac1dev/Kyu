@@ -1,6 +1,6 @@
 {
   "name": "anixart-desktop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Десктоп-клиент для просмотра аниме на основе AniXart API",
   "main": "main.js",
   "scripts": {

@@ -100,6 +100,8 @@ const ICONS = {
   winmin: '<line x1="5" y1="12" x2="19" y2="12"/>',
   winmax: '<rect x="5" y="5" width="14" height="14" rx="2"/>',
   winclose: '<line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>',
+  fs: '<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>',
+  fsexit: '<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/>',
 };
 function ic(name, size = 18) { const s = el('span', { class: 'ic' }); s.innerHTML = `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ''}</svg>`; return s; }
 function iconBtn(cls, name, text, on) { const b = el('button', { class: cls }, ic(name, 17), text ? el('span', {}, text) : ''); if (on) b.addEventListener('click', on); return b; }
@@ -705,6 +707,14 @@ function renderReleaseDetail(r) {
     else if (key === 'comments') loadComments(r.id, mtabBody);
   };
   TABS.forEach((t) => mtabs.append(el('div', { class: 'mtab', 'data-k': t.key, onclick: () => renderTab(t.key) }, t.label)));
+
+  // «Смотрели» (is_viewed = есть в истории) — кликабельно, снимает отметку
+  let viewed = isAuthed() && !!r.is_viewed;
+  const viewedChip = el('span', { class: 'viewed-chip', title: 'Снять отметку (убрать из истории)' });
+  const paintViewed = () => { viewedChip.style.display = viewed ? 'inline-flex' : 'none'; viewedChip.innerHTML = ''; viewedChip.append(ic('check', 13), el('span', {}, 'Смотрели'), el('span', { class: 'vx' }, '✕')); };
+  paintViewed();
+  viewedChip.addEventListener('click', async () => { if (!viewed) return; viewed = false; paintViewed(); await window.anixart.historyDelete(r.id).catch(() => {}); });
+
   modalCard.append(
     el('button', { class: 'close-x', onclick: closeModal }, '×'),
     el('div', { class: 'detail-banner' }, el('img', { src: r.image || '', alt: '' })),
@@ -717,7 +727,7 @@ function renderReleaseDetail(r) {
           el('span', {}, el('b', {}, '★ ' + (r.grade ? Number(r.grade).toFixed(2) : '—'))),
           el('span', { class: 'muted' }, (r.year || '—') + ' · ' + ((r.status && r.status.name) || r.country || '')),
           el('span', { class: 'muted' }, 'Эп.: ' + (r.episodes_released ?? '?') + '/' + (r.episodes_total ?? '?')),
-          r.is_viewed ? el('span', { style: 'color:#3ddc84' }, '✓ просмотрено') : ''),
+          viewedChip),
         el('div', { class: 'chips' }, genres.map((g) => el('span', { class: 'chip' }, g))),
         el('div', { class: 'detail-actions' },
           iconBtn('btn', 'play', 'Смотреть', () => openPlayer(r)),
@@ -783,7 +793,6 @@ function buildComment(c, rid, isReply, ro) {
 }
 async function openArticle(a, ch) {
   modal.classList.remove('hidden'); modalCard.innerHTML = '';
-  modalCard.append(el('button', { class: 'close-x', onclick: closeModal }, '×'));
   modalCard.append(el('div', { class: 'article-head', style: 'padding:26px 32px 0' },
     el('img', { class: 'channel-av', src: (ch && ch.avatar) || '', alt: '' }),
     el('div', {}, el('div', { class: 'comment-author', style: 'font-size:16px' }, (ch && ch.title) || 'Канал'), el('div', { class: 'comment-date' }, fmtDate(a.creation_date)))));
@@ -799,6 +808,7 @@ async function openArticle(a, ch) {
     cbox.append(el('div', { class: 'comment-form' }, ta, el('div', { class: 'comment-form-row' }, send)));
   }
   cbox.append(reload);
+  modalCard.append(el('button', { class: 'close-x', onclick: closeModal }, '×'));
   loadArticleComments(a.id, reload);
 }
 async function loadArticleComments(aid, list) {
@@ -826,13 +836,20 @@ async function openPlayer(r) {
   viewRoot.innerHTML = '';
   const selectors = el('div', { class: 'player-selectors' });
   const epStrip = el('div', { class: 'episode-strip' });
-  const frameWrap = el('div', {});
+  const frameWrap = el('div', { class: 'player-main' });
   const bridge = new URL('playerbridge.js', location.href).href;
   const frame = el('webview', { class: 'player-frame', allowpopups: true, src: 'about:blank', preload: bridge, webpreferences: 'contextIsolation=no' });
-  frame.addEventListener('enter-html-full-screen', () => { frame.classList.add('fs'); window.anixart.winSetFullScreen(true); });
-  frame.addEventListener('leave-html-full-screen', () => { frame.classList.remove('fs'); window.anixart.winSetFullScreen(false); });
-  frameWrap.append(frame);
-  viewRoot.append(selectors, epStrip, frameWrap);
+  // Свой полноэкранный режим — надёжно работает и для Kodik, и для Sibnet
+  let fsOn = false;
+  const fsExit = el('button', { class: 'player-fs-exit', title: 'Выйти из полного экрана (Esc)' }); fsExit.append(ic('fsexit', 18));
+  const setFs = (on) => { fsOn = on; frame.classList.toggle('fs', on); fsExit.classList.toggle('show', on); window.anixart.winSetFullScreen(on); };
+  fsExit.addEventListener('click', () => setFs(false));
+  frame.addEventListener('enter-html-full-screen', () => setFs(true));
+  frame.addEventListener('leave-html-full-screen', () => setFs(false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && fsOn && frame.isConnected) setFs(false); });
+  frameWrap.append(frame, fsExit);
+  const layout = el('div', { class: 'player-layout' }, frameWrap, epStrip);
+  viewRoot.append(selectors, layout);
   let current = null, watchTimer = null;
   const playEpisode = (ep, sourceId, btn) => {
     current = { rId: r.id, sId: sourceId, position: ep.position };
@@ -857,7 +874,7 @@ async function openPlayer(r) {
   let curType = types[0].id, curSource = null;
   const typeDd = ddSelect(types.map((t) => ({ value: t.id, label: `${t.name}${t.is_sub ? ' (суб)' : ''} · ${t.episodes_count} эп.` })), curType, (v) => { curType = Number(v); loadSources(); });
   const sourceHost = el('span');
-  selectors.append(el('label', {}, 'Озвучка:'), typeDd, el('label', {}, 'Источник:'), sourceHost);
+  selectors.append(el('label', {}, 'Озвучка:'), typeDd, el('label', {}, 'Источник:'), sourceHost, iconBtn('btn secondary player-fs-enter', 'fs', 'На весь экран', () => setFs(true)));
   const loadSources = async () => {
     sourceHost.innerHTML = ''; sourceHost.append(el('span', { class: 'muted' }, 'загрузка…')); epStrip.innerHTML = ''; frame.src = 'about:blank';
     const sres = await window.anixart.episodeSources(r.id, curType);

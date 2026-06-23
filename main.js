@@ -97,6 +97,7 @@ function registerIpc() {
   ipcMain.handle('api:historyList', (_e, { page }) => apiRequest(`/history/${page}`));
   ipcMain.handle('api:historyAdd', (_e, { rId, sId, position }) =>
     apiRequest(`/history/add/${rId}/${sId}/${position || 0}`));
+  ipcMain.handle('api:historyDelete', (_e, { id }) => apiRequest(`/history/delete/${id}`));
   // Отметить серию просмотренной / снять отметку
   ipcMain.handle('api:episodeWatch', (_e, { rId, sId, position }) =>
     apiRequest(`/episode/watch/${rId}/${sId}${position != null ? '/' + position : ''}`));
