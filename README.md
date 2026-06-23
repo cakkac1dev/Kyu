@@ -18,9 +18,17 @@
 
 ## ⬇️ Скачать
 
-[![Скачать](https://img.shields.io/badge/Скачать-Kyu%20portable%20.exe-7c5cff?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/cakkac1dev/Kyu/releases/latest)
+[![Скачать](https://img.shields.io/badge/Скачать-Kyu-7c5cff?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/cakkac1dev/Kyu/releases/latest)
 
-Последняя версия — на странице **[Releases](https://github.com/cakkac1dev/Kyu/releases/latest)**: скачай файл `Kyu-portable.exe`, запусти — установка не нужна.
+Последняя версия — на странице **[Releases](https://github.com/cakkac1dev/Kyu/releases/latest)**. Два варианта:
+
+- **`Kyu-Setup-<версия>.exe`** — установщик (ставит в меню Пуск + ярлык на рабочий стол).
+- **`Kyu-<версия>-win.zip`** — переносимая версия: распакуй и запусти `Kyu.exe` из папки.
+
+> 🛡️ **Антивирус ругается?** Это **ложное срабатывание** — приложение не подписано сертификатом
+> и новое, поэтому эвристика (`Wacatac`/SmartScreen) может его флагать. Это типично для
+> неподписанных Electron-приложений. Файл можно разрешить вручную или скачать **ZIP-вариант** —
+> его антивирусы трогают реже.
 
 ## Возможности
 
@@ -46,13 +54,14 @@ npm start          # запустит приложение
 > Если бинарник Electron не скачался автоматически (политика npm `allow-scripts`):
 > `node node_modules/electron/install.js`
 
-## Сборка портативного .exe
+## Сборка
 
 ```bash
-npm run portable   # соберёт dist/Kyu-<версия>-portable.exe
+npm run dist   # соберёт установщик + ZIP в dist/
 ```
 
-Это **один портативный файл** — без установки. Иконка и метаданные берутся из `build/icon.png` и `package.json`.
+Создаются **`Kyu-Setup-<версия>.exe`** (NSIS-установщик) и **`Kyu-<версия>-win.zip`** (переносимая папка).
+Иконка и метаданные берутся из `build/icon.png` и `package.json`.
 
 ## Куда сохраняются данные
 
