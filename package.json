@@ -23,9 +23,18 @@
       "src/**/*"
     ],
     "win": {
-      "target": "portable",
-      "icon": "build/icon.png",
-      "artifactName": "Kyu-${version}-portable.exe"
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "artifactName": "Kyu-Setup-${version}.exe"
     },
     "portable": {
       "artifactName": "Kyu-${version}-portable.exe"
